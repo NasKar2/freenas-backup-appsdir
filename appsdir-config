@@ -1,0 +1,7 @@
+cron=""
+POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
+BACKUP_PATH="temp"
+BACKUP_NAME=".tar.gz"
+RESTORE_PATH="/"
+DELETE_APPS="lazylibrarian sabnzbd plexpass urbackup sonarr radarr lidarr tautulli wordpress"
