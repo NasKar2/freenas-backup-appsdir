@@ -23,4 +23,5 @@ BACKUP_NAME=".tar.gz"
 DELETE_APPS="lazylibrarian sabnzbd plexpass urbackup sonarr radarr lidarr tautulli wordpress"
 ```
 
-Restore option will restore all the *.tar.gz files to the POOL_PATH/APPS_PATH location that was the originally backup
+Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
+
