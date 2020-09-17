@@ -1,7 +1,8 @@
 # freenas-appsdir-backup
-## Backup apps directory without items in the delete variable
 
-## Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
+### Backup apps directory without items in the delete variable
+
+### Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
 
 ### Prerequisites
 
