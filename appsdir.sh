@@ -40,6 +40,17 @@ fi
 #  exit 1                                                                                                        
 #fi
 
+#
+# Check if Backup dir exists
+#
+if [[ ! -d "${POOL_PATH}/${BACKUP_PATH}" ]]; then
+   mkdir ${POOL_PATH}/${BACKUP_PATH}
+   echo "does not exist"
+   echo "directory "${POOL_PATH}/${BACKUP_PATH} "created"
+else
+   echo "does exist"
+   echo "directory "${POOL_PATH}/${BACKUP_PATH} "already exists"
+fi
 
 #
 # Ask to Backup or restore, if cron=yes just backup

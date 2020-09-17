@@ -1,6 +1,6 @@
 cron=""
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
-BACKUP_PATH="temp"
+BACKUP_PATH="backup/apps"
 BACKUP_NAME=".tar.gz"
-DELETE_APPS="lazylibrarian sabnzbd plexpass urbackup sonarr radarr lidarr tautulli wordpress"
+DELETE_APPS="duplicati urbackup"
