@@ -1,9 +1,13 @@
 # freenas-appsdir-backup
-Backup apps directory without items in the delete variable
+## Backup apps directory without items in the delete variable
+
+## Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
+
+### Prerequisites
 
 Create appsdir-config file
 
-cron="yes" will set the option to backup
+cron="yes" will set the option to automatically backup
 
 POOL_PATH is the the location of the pool
 
@@ -22,6 +26,4 @@ BACKUP_PATH="temp"
 BACKUP_NAME=".tar.gz"
 DELETE_APPS="lazylibrarian sabnzbd plexpass urbackup sonarr radarr lidarr tautulli wordpress"
 ```
-
-Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
 

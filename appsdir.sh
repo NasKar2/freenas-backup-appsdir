@@ -71,7 +71,7 @@ for target in "${delete[@]}"; do
 done
 for dir in "${array[@]}"; do echo "tar "${dir};
 GZ=${dir}${BACKUP_NAME}
-#  tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} ${POOL_PATH}/${APPS_PATH}/${dir}
+  tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} ${POOL_PATH}/${APPS_PATH}/${dir}
   echo ${POOL_PATH}/${BACKUP_PATH}/${GZ}
   echo "Backup complete file located at ${POOL_PATH}/${BACKUP_PATH}/${GZ}"
   echo
