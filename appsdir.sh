@@ -8,7 +8,7 @@ APPS_PATH="apps"
 BACKUP_PATH="temp"
 BACKUP_NAME="apps.tar.gz"
 SKIP_APPS="plexpass urbackup sonarr radarr lidarr"
-
+PLEX_APP="plexpass"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
@@ -39,6 +39,10 @@ fi
 #  echo 'Configuration error: SKIP_APPS must be set'
 #  exit 1                                                                                                        
 #fi
+if [ -z $PLEX_APP ]; then
+  echo 'Configuration error: PLEX_APP must be set, use 'none' if no plex install'
+  exit 1
+fi
 
 #
 # Check if Backup dir exists
@@ -82,7 +86,12 @@ for target in "${delete[@]}"; do
 done
 for dir in "${array[@]}"; do echo "tar "${dir};
 GZ=${dir}${BACKUP_NAME}
-  tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} ${POOL_PATH}/${APPS_PATH}/${dir}
+    if [[ ${dir} = ${PLEX_APP} ]]; then
+      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}
+     #echo "tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}"
+    else
+      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} ${POOL_PATH}/${APPS_PATH}/${dir}
+    fi
   echo ${POOL_PATH}/${BACKUP_PATH}/${GZ}
   echo "Backup complete file located at ${POOL_PATH}/${BACKUP_PATH}/${GZ}"
   echo
@@ -111,6 +120,7 @@ echo "You choose ${dir}"
 restore=$dir
 currentRestoreApp="${RESTORE_DIR}/${restore}"
 #echo $currentRestoreApp
+GZ=${dir}${BACKUP_NAME}
 
 #
 # Check if currentRestoreDir exists
@@ -125,14 +135,16 @@ if [ $dir == "ALL" ]; then
      unset 'array[${#array[@]}-1]'
   for dir in "${array[@]}";
   do
-     tar -xzvf ${RESTORE_DIR}/${dir} -P -C /
-    #echo "tar -xzvf "${RESTORE_DIR}/${dir} -P -C /
+     GZ=${dir}${BACKUP_NAME}
+     tar -xzf ${RESTORE_DIR}/${dir} -C /
+     echo "tar -xzf "${RESTORE_DIR}/${dir}" -C /"
      echo ${dir}" restored"
      echo
   done
 else
-   tar -xzvf ${currentRestoreApp} -P -C /
-  #echo "tar -xzvf "${currentRestoreApp} -P -C /
+ echo ${RESTORE_DIR}
+   tar -xzvf ${currentRestoreApp} -C /
+   echo "tar -xzvf "${currentRestoreApp} -C /
    echo ${dir}" restored"
 fi
 else
@@ -140,3 +152,4 @@ else
   echo "Must enter '(B)ackup' to backup Plex or '(R)estore' to restore app directory: "
   echo
 fi
+
