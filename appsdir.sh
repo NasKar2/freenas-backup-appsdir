@@ -7,7 +7,7 @@ POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 BACKUP_PATH="temp"
 BACKUP_NAME="apps.tar.gz"
-DELETE_APPS="plexpass urbackup sonarr radarr lidarr"
+SKIP_APPS="plexpass urbackup sonarr radarr lidarr"
 
 
 SCRIPT=$(readlink -f "$0")
@@ -35,8 +35,8 @@ if [ -z $BACKUP_NAME ]; then
   echo 'Configuration error: BACKUP_NAME must be set'
   exit 1                                                                                                        
 fi
-#if [ -z $DELETE_APPS ]; then
-#  echo 'Configuration error: DELETE_APPS must be set'
+#if [ -z $SKIP_APPS ]; then
+#  echo 'Configuration error: SKIP_APPS must be set'
 #  exit 1                                                                                                        
 #fi
 
@@ -64,7 +64,7 @@ echo
 if [ "$choice" = "B" ] || [ "$choice" = "b" ]; then
 echo "B"
 echo
-delete=(${DELETE_APPS})
+delete=(${SKIP_APPS})
 cd ${POOL_PATH}/${APPS_PATH}
 shopt -s dotglob
 shopt -s nullglob

@@ -18,6 +18,7 @@ BACKUP_PATH is the location to store the backup files
 
 BACKUP_NAME is the name to be appended to the jail name ie. caddy.tar.gz
 
+SKIP_APPS is the names of apps directories to not backup
 
 ```
 cron=""
@@ -25,6 +26,6 @@ POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 BACKUP_PATH="temp"
 BACKUP_NAME=".tar.gz"
-DELETE_APPS="lazylibrarian sabnzbd plexpass urbackup sonarr radarr lidarr tautulli wordpress"
+SKIP_APPS="duplicati urbackup"
 ```
 
