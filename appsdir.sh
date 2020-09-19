@@ -5,10 +5,15 @@
 cron=""
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
-BACKUP_PATH="temp"
-BACKUP_NAME="apps.tar.gz"
-SKIP_APPS="plexpass urbackup sonarr radarr lidarr"
+BACKUP_PATH="backup/apps"
+BACKUP_NAME=".tar.gz"
+SKIP_APPS="duplicati urbackup"
 PLEX_APP="plexpass"
+WORDPRESS_APP="wordpress"
+DATABASE_NAME="wordpress"
+DB_BACKUP_NAME="wordpress.sql"
+DB_PASSWORD="your_wordpress_database_password"
+CONFIG_PATH="/config"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
@@ -40,8 +45,12 @@ fi
 #  exit 1                                                                                                        
 #fi
 if [ -z $PLEX_APP ]; then
-  echo 'Configuration error: PLEX_APP must be set, use 'none' if no plex install'
-  exit 1
+  echo "PLEX_APP not set so will be set to default 'none'"
+  PLEX_APP="none"
+fi
+if [ -z $WORDPRESS_APP ]; then
+  echo "WORDPRESS_APP not set so will be set to default 'none'"
+  WORDPRESS_APP="none"
 fi
 
 #
@@ -73,10 +82,6 @@ cd ${POOL_PATH}/${APPS_PATH}
 shopt -s dotglob
 shopt -s nullglob
 array=(*)
-#for del in ${delete[@]}
-#do
-#   array=("${array[@]/$del}") #Quotes when working with strings                                 
-#done
 for target in "${delete[@]}"; do
   for i in "${!array[@]}"; do
     if [[ ${array[i]} = $target ]]; then
@@ -89,6 +94,10 @@ GZ=${dir}${BACKUP_NAME}
     if [[ ${dir} = ${PLEX_APP} ]]; then
       tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}
      #echo "tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}"
+    elif [[ ${dir} = ${WORDPRESS_APP} ]]; then
+      iocage exec ${WORDPRESS_APP} "mysqldump --single-transaction -h localhost -u "root" -p"${DB_PASSWORD}" "${DATABASE_NAME}" > "/${CONFIG_PATH}/${DB_BACKUP_NAME}""
+      echo "Wordpress database backup ${DB_BACKUP_NAME} complete"
+      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} ${POOL_PATH}/${APPS_PATH}/${dir}
     else
       tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} ${POOL_PATH}/${APPS_PATH}/${dir}
     fi
@@ -115,12 +124,12 @@ select dir in "${array[@]}"; do echo; break; done
 
 echo "You choose ${dir}"
 
-
 # More Variables
-restore=$dir
-currentRestoreApp="${RESTORE_DIR}/${restore}"
-#echo $currentRestoreApp
-GZ=${dir}${BACKUP_NAME}
+restore="${dir%%.*}"
+#echo $restore
+currentRestoreApp="${dir}"
+#echo "currentRestoreAPP $currentRestoreApp"
+GZ=${dir}
 
 #
 # Check if currentRestoreDir exists
@@ -135,16 +144,33 @@ if [ $dir == "ALL" ]; then
      unset 'array[${#array[@]}-1]'
   for dir in "${array[@]}";
   do
-     GZ=${dir}${BACKUP_NAME}
+     restore="${dir%%.*}"
+echo "restore=${restore}"
      tar -xzf ${RESTORE_DIR}/${dir} -C /
      echo "tar -xzf "${RESTORE_DIR}/${dir}" -C /"
+       if [ $restore == "wordpress" ]; then
+         iocage exec ${restore} "mysql -u "root" -p"${DB_PASSWORD}" "${DATABASE_NAME}" < "/${CONFIG_PATH}/${DB_BACKUP_NAME}""
+         echo "The database ${DB_BACKUP_NAME} has been restored"
+         iocage restart ${restore}
+       fi
      echo ${dir}" restored"
      echo
   done
 else
- echo ${RESTORE_DIR}
+   echo ${RESTORE_DIR}
    tar -xzvf ${currentRestoreApp} -C /
-   echo "tar -xzvf "${currentRestoreApp} -C /
+#   echo "dir = ${dir}"
+#   echo "tar -xzvf "${currentRestoreApp} -C /
+       if [ $restore == "wordpress" ]; then
+#echo "in the wordpress if statement"
+#echo "restore=${restore}"
+#echo "DB_PASSWORD=${DB_PASSWORD}"
+#echo "DATABASE_NAME=${DATABASE_NAME}"
+#echo "DB_BACKUP_NAME=${DB_BACKUP_NAME}"
+         iocage exec ${restore} "mysql -u "root" -p"${DB_PASSWORD}" "${DATABASE_NAME}" < "/${CONFIG_PATH}/${DB_BACKUP_NAME}""
+         echo "The database ${DB_BACKUP_NAME} has been restored"
+         iocage restart ${restore}
+       fi
    echo ${dir}" restored"
 fi
 else
