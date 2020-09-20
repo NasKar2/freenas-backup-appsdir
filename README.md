@@ -1,4 +1,4 @@
-# freenas-appsdir-backup
+# freenas-backup-appsdir
 
 ### Backup apps directory without items in the delete variable
 
