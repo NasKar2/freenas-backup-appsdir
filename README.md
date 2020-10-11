@@ -1,14 +1,15 @@
 # freenas-backup-appsdir
 
-### Backup apps directory without items in the delete variable
+## Backup apps directory without items in the delete variable
 
-### Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
+Change to the directory you have cloned the repository to and run it by typing ```./appsdir.sh```
+To automate backup, create a cron job pointing to the backup script. The prompts wll be bypassed in any non-interactive operation like a cron task in the FreeNAS GUI.
+
+## Restore option will restore all(last option) or an individual .tar.gz file to the POOL_PATH/APPS_PATH location that was the originally backup
 
 ### Prerequisites
 
 Create appsdir-config file
-
-cron="yes" will set the option to automatically backup
 
 POOL_PATH is the the location of the pool
 
@@ -33,7 +34,6 @@ DB_PASSWORD is the password for the mysql database
 CONFIG_PATH is the path in the jail that has the /mnt/v1/apps/wordpress mounted
 
 ```
-cron=""
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 BACKUP_PATH="backup/apps"

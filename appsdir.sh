@@ -64,15 +64,16 @@ else
    echo "does exist"
    echo "directory "${POOL_PATH}/${BACKUP_PATH} "already exists"
 fi
-
 #
-# Ask to Backup or restore, if cron=yes just backup
-#
-if [ "$cron" = "yes" ]; then
- choice="B"
+# Ask to Backup or restore, if run interactively
+# 
+if ! [ -t 1 ] ; then
+  # Not run interactively
+  choice="B"
 else
  read -p "Enter '(B)ackup' to backup Nextcloud or '(R)estore' to restore Nextcloud: " choice
 fi
+
 echo
 if [ "$choice" = "B" ] || [ "$choice" = "b" ]; then
 echo "B"
