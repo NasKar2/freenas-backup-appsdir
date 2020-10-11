@@ -11,7 +11,7 @@ To automate backup, create a cron job pointing to the backup script. The prompts
 
 Create appsdir-config file
 
-POOL_PATH is the the location of the pool
+POOL_PATH is the the location of the pool and will be set by default
 
 APPS_PATH is the location of the apps directory
 
@@ -34,7 +34,6 @@ DB_PASSWORD is the password for the mysql database
 CONFIG_PATH is the path in the jail that has the /mnt/v1/apps/wordpress mounted
 
 ```
-POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 BACKUP_PATH="backup/apps"
 BACKUP_NAME=".tar.gz"

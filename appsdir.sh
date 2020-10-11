@@ -25,8 +25,8 @@ RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 #
 
 if [ -z $POOL_PATH ]; then
-  echo 'Configuration error: POOL_PATH must be set'
-  exit 1                                                                                                        
+  POOL_PATH="/mnt/$(iocage get -p)"
+  echo "POOL_PATH is defaulting to ${POOL_PATH}"                                                                
 fi
 if [ -z $APPS_PATH ]; then
   echo 'Configuration error: APPS_PATH must be set'
