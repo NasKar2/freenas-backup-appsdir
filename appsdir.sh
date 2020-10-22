@@ -2,7 +2,6 @@
 #
 # Initialize Variables
 #
-cron=""
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
 BACKUP_PATH="backup/apps"
