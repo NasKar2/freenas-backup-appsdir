@@ -21,7 +21,7 @@ BACKUP_NAME is the name to be appended to the jail name ie. caddy.tar.gz
 
 SKIP_APPS is the names of apps directories to not backup
 
-PLEX_APP is the name of the plex directory. TAR will skip the cache directory.
+PLEX_APP is the name of the plex directory. TAR will skip the cache,diagnositics,logs,updates directories.
 
 WORDPRESS_APP is the name of your wordpress jail
 

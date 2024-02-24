@@ -92,7 +92,7 @@ done
 for dir in "${array[@]}"; do echo "tar "${dir};
 GZ=${dir}${BACKUP_NAME}
     if [[ ${dir} = ${PLEX_APP} ]]; then
-      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}
+      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude-from="plex_exclude.txt" ${POOL_PATH}/${APPS_PATH}/${dir}
      #echo "tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}"
     elif [[ ${dir} = ${WORDPRESS_APP} ]]; then
       iocage exec ${WORDPRESS_APP} "mysqldump --single-transaction -h localhost -u "root" -p"${DB_PASSWORD}" "${DATABASE_NAME}" > "/${CONFIG_PATH}/${DB_BACKUP_NAME}""
