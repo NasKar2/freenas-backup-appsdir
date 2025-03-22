@@ -17,7 +17,7 @@ CONFIG_PATH="/config"
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/appsdir-config
-RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
+#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 #
 # Check if appsdir-config created correctly
@@ -90,9 +90,10 @@ for target in "${delete[@]}"; do
   done
 done
 for dir in "${array[@]}"; do echo "tar "${dir};
+docker stop ${dir}
 GZ=${dir}${BACKUP_NAME}
     if [[ ${dir} = ${PLEX_APP} ]]; then
-      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude-from="plex_exclude.txt" ${POOL_PATH}/${APPS_PATH}/${dir}
+      tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude="plex_exclude.txt" ${POOL_PATH}/${APPS_PATH}/${dir}
      #echo "tar zcfP ${POOL_PATH}/${BACKUP_PATH}/${GZ} --exclude=./Plex\ Media\ Server/Cache ${POOL_PATH}/${APPS_PATH}/${dir}"
     elif [[ ${dir} = ${WORDPRESS_APP} ]]; then
       iocage exec ${WORDPRESS_APP} "mysqldump --single-transaction -h localhost -u "root" -p"${DB_PASSWORD}" "${DATABASE_NAME}" > "/${CONFIG_PATH}/${DB_BACKUP_NAME}""
@@ -104,6 +105,7 @@ GZ=${dir}${BACKUP_NAME}
   echo ${POOL_PATH}/${BACKUP_PATH}/${GZ}
   echo "Backup complete file located at ${POOL_PATH}/${BACKUP_PATH}/${GZ}"
   echo
+docker start ${dir}
 done
 
 elif [ "$choice" = "R" ] || [ "$choice" = "r" ]; then
